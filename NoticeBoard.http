@@ -1,0 +1,6 @@
+@NoticeBoard_HostAddress = http://localhost:5111
+
+GET {{NoticeBoard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

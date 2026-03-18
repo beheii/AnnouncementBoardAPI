@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../NoticeBoard_frontend/NoticeBoard_frontend.csproj" />
+  <Project Path="NoticeBoard.csproj" />
+</Solution>
