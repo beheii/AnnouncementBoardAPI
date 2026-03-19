@@ -19,27 +19,27 @@ public class AnnouncementService : IAnnouncementService
     public Task<Announcement?> GetByIdAsync(int id)
         => _repository.GetByIdAsync(id);
 
-    public async Task<Announcement> CreateAsync(CreateAnnouncementDto dto)
+    public async Task<Announcement> CreateAsync(CreateAnnouncementDto dto, int userId)
     {
-        var id = await _repository.CreateAsync(dto);
+        var id = await _repository.CreateAsync(dto, userId);
         var created = await _repository.GetByIdAsync(id)
                       ?? throw new InvalidOperationException("Created announcement not found.");
 
         return created;
     }
 
-    public async Task UpdateAsync(int id, UpdateAnnouncementDto dto)
+    public async Task UpdateAsync(int id, UpdateAnnouncementDto dto, int userId)
     {
-        var affected = await _repository.UpdateAsync(id, dto);
+        var affected = await _repository.UpdateAsync(id, dto, userId);
         if (affected == 0)
         {
             throw new KeyNotFoundException($"Announcement {id} not found.");
         }
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int id, int userId)
     {
-        var affected = await _repository.DeleteAsync(id);
+        var affected = await _repository.DeleteAsync(id, userId);
         if (affected == 0)
         {
             throw new KeyNotFoundException($"Announcement {id} not found.");

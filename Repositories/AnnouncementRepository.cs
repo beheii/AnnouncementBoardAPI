@@ -38,7 +38,7 @@ public class AnnouncementRepository : IAnnouncementRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<int> CreateAsync(CreateAnnouncementDto dto)
+    public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
     {
         using var db = CreateConnection();
 
@@ -46,6 +46,7 @@ public class AnnouncementRepository : IAnnouncementRepository
             "dbo.sp_CreateAnnouncement",
             new
             {
+                UserId = userId,
                 dto.Title,
                 dto.Description,
                 dto.Status,
@@ -57,15 +58,16 @@ public class AnnouncementRepository : IAnnouncementRepository
         return newId;
     }
 
-    public async Task<int> UpdateAsync(int id, UpdateAnnouncementDto dto)
+    public async Task<int> UpdateAsync(int id, UpdateAnnouncementDto dto, int userId)
     {
         using var db = CreateConnection();
 
-        var affected = await db.ExecuteAsync(
+        var affected = await db.QuerySingleAsync<int>(
             "dbo.sp_UpdateAnnouncement",
             new
             {
                 Id = id,
+                UserId = userId,
                 dto.Title,
                 dto.Description,
                 dto.Status,
@@ -77,13 +79,13 @@ public class AnnouncementRepository : IAnnouncementRepository
         return affected;
     }
 
-    public async Task<int> DeleteAsync(int id)
+    public async Task<int> DeleteAsync(int id, int userId)
     {
         using var db = CreateConnection();
 
-        var affected = await db.ExecuteAsync(
+        var affected = await db.QuerySingleAsync<int>(
             "dbo.sp_DeleteAnnouncement",
-            new { Id = id },
+            new { Id = id, UserId = userId },
             commandType: CommandType.StoredProcedure);
 
         return affected;

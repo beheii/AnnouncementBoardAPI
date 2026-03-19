@@ -10,6 +10,7 @@ namespace NoticeBoard.Controllers;
 public class AnnouncementsController : ControllerBase
 {
     private readonly IAnnouncementService _service;
+    private const int TestUserId = 1; // TEMP: use existing DB user for non-auth testing
 
     public AnnouncementsController(IAnnouncementService service)
     {
@@ -41,7 +42,7 @@ public class AnnouncementsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Create([FromBody] CreateAnnouncementDto dto)
     {
-        var created = await _service.CreateAsync(dto);
+        var created = await _service.CreateAsync(dto, TestUserId);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
@@ -50,7 +51,7 @@ public class AnnouncementsController : ControllerBase
     {
         try
         {
-            await _service.UpdateAsync(id, dto);
+            await _service.UpdateAsync(id, dto, TestUserId);
             return NoContent();
         }
         catch (KeyNotFoundException)
@@ -64,7 +65,7 @@ public class AnnouncementsController : ControllerBase
     {
         try
         {
-            await _service.DeleteAsync(id);
+            await _service.DeleteAsync(id, TestUserId);
             return NoContent();
         }
         catch (KeyNotFoundException)

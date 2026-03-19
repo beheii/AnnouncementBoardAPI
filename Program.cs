@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using NoticeBoard.Repositories;
 using NoticeBoard.Services;
 namespace NoticeBoard
@@ -17,20 +16,16 @@ namespace NoticeBoard
 
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-           // if (app.Environment.IsDevelopment())
-           // {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            //}
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
 
             app.MapControllers();
 
