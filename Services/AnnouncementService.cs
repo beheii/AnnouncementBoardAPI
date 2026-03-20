@@ -1,5 +1,4 @@
 using NoticeBoard.DTO;
-using NoticeBoard.Models;
 using NoticeBoard.Repositories;
 
 namespace NoticeBoard.Services;
@@ -13,13 +12,13 @@ public class AnnouncementService : IAnnouncementService
         _repository = repository;
     }
 
-    public Task<IEnumerable<Announcement>> GetAllAsync(string? category, string? subCategory, bool? status)
+    public Task<IEnumerable<AnnouncementResponseDto>> GetAllAsync(string? category, string? subCategory, bool? status)
         => _repository.GetAllAsync(category, subCategory, status);
 
-    public Task<Announcement?> GetByIdAsync(int id)
+    public Task<AnnouncementResponseDto?> GetByIdAsync(int id)
         => _repository.GetByIdAsync(id);
 
-    public async Task<Announcement> CreateAsync(CreateAnnouncementDto dto, int userId)
+    public async Task<AnnouncementResponseDto> CreateAsync(CreateAnnouncementDto dto, int userId)
     {
         var id = await _repository.CreateAsync(dto, userId);
         var created = await _repository.GetByIdAsync(id)

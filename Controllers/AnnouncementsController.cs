@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NoticeBoard.DTO;
-using NoticeBoard.Models;
 using NoticeBoard.Repositories;
 using NoticeBoard.Services;
 
@@ -19,7 +18,7 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
         [FromQuery] bool? status)
     {
         var items = await service.GetAllAsync(category, subCategory, status);
-        return Ok(items.Select(MapToResponseDto));
+        return Ok(items);
     }
 
     [HttpGet("{id:int}")]
@@ -31,7 +30,7 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
             return NotFound();
         }
 
-        return Ok(MapToResponseDto(item));
+        return Ok(item);
     }
 
     [Authorize]
@@ -40,7 +39,7 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
     {
         var userId = await GetCurrentUserIdAsync();
         var created = await service.CreateAsync(dto, userId);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, MapToResponseDto(created));
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [Authorize]
@@ -94,21 +93,5 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
 
         var user = await userRepository.FindOrCreateAsync(sub, email, name);
         return user.Id;
-    }
-
-    private static AnnouncementResponseDto MapToResponseDto(Announcement announcement)
-    {
-        return new AnnouncementResponseDto
-        {
-            Id = announcement.Id,
-            UserId = announcement.UserId,
-            Title = announcement.Title,
-            Description = announcement.Description,
-            CreatedDate = announcement.CreatedDate,
-            UpdatedDate = announcement.UpdatedDate,
-            Status = announcement.Status,
-            Category = announcement.Category,
-            SubCategory = announcement.SubCategory
-        };
     }
 }
