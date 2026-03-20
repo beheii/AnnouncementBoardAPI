@@ -1,6 +1,8 @@
-## Additional Improvements
+# Announcement board — Backend
 
-Beyond the basic functionality, several enhancements were implemented to improve the structure, performance, and maintainability of the application.
+An **ASP.NET Core API** application for the Announcement board project. It handles business logic, data processing, and communication with the database. The API provides endpoints for managing announcements and is consumed by a separate **[ASP.NET Core MVC frontend](https://announcement-board-frontend-gabvcrfhfbdjamh0.polandcentral-01.azurewebsites.net/)**
+
+Beyond the requirements defined in the technical specification, several enhancements were implemented to improve the overall structure, performance, and maintainability of the application:
 
 ## Database Structure & Optimization
 
@@ -12,7 +14,7 @@ Additionally, the Announcements table was extended with an UpdatedDate field. Th
 
 ## Data Access
 
-Database interaction is implemented using stored procedures in combination with Dapper, providing better control over queries and improved performance compared to full ORM usage.
+Database interaction is implemented using stored procedures in combination with Dapper.
 
 ## Deployment & Architecture
 
