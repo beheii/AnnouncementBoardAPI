@@ -6,4 +6,3 @@ public interface ICategoryRepository
 {
     Task<List<CategoryOptionDto>> GetCategoryOptionsAsync();
 }
-

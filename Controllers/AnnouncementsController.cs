@@ -52,15 +52,8 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
         if (existing is null) return NotFound();
         if (existing.UserId != userId) return Forbid();
 
-        try
-        {
-            await service.UpdateAsync(id, dto, userId);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await service.UpdateAsync(id, dto, userId);
+        return NoContent();
     }
 
     [Authorize]
@@ -73,15 +66,8 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
         if (existing is null) return NotFound();
         if (existing.UserId != userId) return Forbid();
 
-        try
-        {
-            await service.DeleteAsync(id, userId);
-            return NoContent();
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await service.DeleteAsync(id, userId);
+        return NoContent();
     }
 
     private async Task<int> GetCurrentUserIdAsync()

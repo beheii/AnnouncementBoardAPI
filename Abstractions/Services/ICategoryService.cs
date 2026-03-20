@@ -6,4 +6,3 @@ public interface ICategoryService
 {
     Task<List<CategoryOptionDto>> GetCategoryOptionsAsync();
 }
-

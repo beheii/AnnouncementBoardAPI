@@ -10,4 +10,3 @@ public interface IAnnouncementService
     Task UpdateAsync(int id, UpdateAnnouncementDto dto, int userId);
     Task DeleteAsync(int id, int userId);
 }
-

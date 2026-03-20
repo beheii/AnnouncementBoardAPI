@@ -10,4 +10,3 @@ public interface IAnnouncementRepository
     Task<int> UpdateAsync(int id, UpdateAnnouncementDto dto, int userId);
     Task<int> DeleteAsync(int id, int userId);
 }
-

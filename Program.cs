@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NoticeBoard.Middleware;
 using NoticeBoard.Repositories;
 using NoticeBoard.Services;
 
@@ -58,6 +59,7 @@ namespace NoticeBoard
             app.UseHttpsRedirection();
 
             app.UseCors("FrontendPolicy");
+            app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
