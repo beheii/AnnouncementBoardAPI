@@ -29,6 +29,19 @@ namespace NoticeBoard
                 });
 
             builder.Services.AddAuthorization();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("FrontendPolicy", policy =>
+                {
+                    var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+                    if (origins.Length > 0)
+                    {
+                        policy.WithOrigins(origins)
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                });
+            });
 
             builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
@@ -44,6 +57,7 @@ namespace NoticeBoard
 
             app.UseHttpsRedirection();
 
+            app.UseCors("FrontendPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 
