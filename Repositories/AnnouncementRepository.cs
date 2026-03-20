@@ -1,6 +1,5 @@
 using System.Data;
 using Dapper;
-using Microsoft.Data.SqlClient;
 using NoticeBoard.DTO;
 using NoticeBoard.Models;
 
@@ -8,19 +7,16 @@ namespace NoticeBoard.Repositories;
 
 public class AnnouncementRepository : IAnnouncementRepository
 {
-    private readonly string _connectionString;
+    private readonly IDbConnectionFactory _connectionFactory;
 
-    public AnnouncementRepository(IConfiguration configuration)
+    public AnnouncementRepository(IDbConnectionFactory connectionFactory)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        _connectionFactory = connectionFactory;
     }
-
-    private SqlConnection CreateConnection() => new(_connectionString);
 
     public async Task<IEnumerable<Announcement>> GetAllAsync(string? category, string? subCategory, bool? status)
     {
-        using var db = CreateConnection();
+        using var db = _connectionFactory.CreateConnection();
 
         return await db.QueryAsync<Announcement>(
             "dbo.sp_GetAnnouncements",
@@ -30,7 +26,7 @@ public class AnnouncementRepository : IAnnouncementRepository
 
     public async Task<Announcement?> GetByIdAsync(int id)
     {
-        using var db = CreateConnection();
+        using var db = _connectionFactory.CreateConnection();
 
         return await db.QuerySingleOrDefaultAsync<Announcement>(
             "dbo.sp_GetAnnouncementById",
@@ -40,7 +36,7 @@ public class AnnouncementRepository : IAnnouncementRepository
 
     public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
     {
-        using var db = CreateConnection();
+        using var db = _connectionFactory.CreateConnection();
 
         var newId = await db.ExecuteScalarAsync<int>(
             "dbo.sp_CreateAnnouncement",
@@ -60,7 +56,7 @@ public class AnnouncementRepository : IAnnouncementRepository
 
     public async Task<int> UpdateAsync(int id, UpdateAnnouncementDto dto, int userId)
     {
-        using var db = CreateConnection();
+        using var db = _connectionFactory.CreateConnection();
 
         var affected = await db.QuerySingleAsync<int>(
             "dbo.sp_UpdateAnnouncement",
@@ -81,7 +77,7 @@ public class AnnouncementRepository : IAnnouncementRepository
 
     public async Task<int> DeleteAsync(int id, int userId)
     {
-        using var db = CreateConnection();
+        using var db = _connectionFactory.CreateConnection();
 
         var affected = await db.QuerySingleAsync<int>(
             "dbo.sp_DeleteAnnouncement",

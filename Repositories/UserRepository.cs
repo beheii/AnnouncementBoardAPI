@@ -1,23 +1,21 @@
 using System.Data;
 using Dapper;
-using Microsoft.Data.SqlClient;
 using NoticeBoard.Models;
 
 namespace NoticeBoard.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly string _connectionString;
+    private readonly IDbConnectionFactory _connectionFactory;
 
-    public UserRepository(IConfiguration configuration)
+    public UserRepository(IDbConnectionFactory connectionFactory)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        _connectionFactory = connectionFactory;
     }
 
     public async Task<User> FindOrCreateAsync(string googleSubject, string email, string? displayName)
     {
-        using var db = new SqlConnection(_connectionString);
+        using var db = _connectionFactory.CreateConnection();
 
         return await db.QuerySingleAsync<User>(
             "dbo.sp_FindOrCreateUser",

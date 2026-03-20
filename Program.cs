@@ -30,6 +30,7 @@ namespace NoticeBoard
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

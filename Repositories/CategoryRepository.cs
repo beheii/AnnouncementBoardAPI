@@ -1,32 +1,24 @@
 using Dapper;
-using Microsoft.Data.SqlClient;
+using System.Data;
 using NoticeBoard.DTO;
 
 namespace NoticeBoard.Repositories;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly string _connectionString;
+    private readonly IDbConnectionFactory _connectionFactory;
 
-    public CategoryRepository(IConfiguration configuration)
+    public CategoryRepository(IDbConnectionFactory connectionFactory)
     {
-        _connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+        _connectionFactory = connectionFactory;
     }
-
-    private SqlConnection CreateConnection() => new(_connectionString);
 
     public async Task<List<CategoryOptionDto>> GetCategoryOptionsAsync()
     {
-        const string sql = """
-            SELECT c.Name AS CategoryName, sc.Name AS SubCategoryName
-            FROM dbo.Categories c
-            LEFT JOIN dbo.SubCategories sc ON sc.CategoryId = c.Id
-            ORDER BY c.Name, sc.Name;
-            """;
-
-        using var db = CreateConnection();
-        var rows = await db.QueryAsync<(string CategoryName, string? SubCategoryName)>(sql);
+        using var db = _connectionFactory.CreateConnection();
+        var rows = await db.QueryAsync<(string CategoryName, string? SubCategoryName)>(
+            "dbo.sp_GetCategoryOptions",
+            commandType: CommandType.StoredProcedure);
 
         return rows
             .GroupBy(r => r.CategoryName)
