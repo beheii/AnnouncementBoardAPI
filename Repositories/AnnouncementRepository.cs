@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using NoticeBoard.DTO;
+using NoticeBoard.Infrastructure.Data;
 
 namespace NoticeBoard.Repositories;
 
@@ -13,21 +14,21 @@ public class AnnouncementRepository : IAnnouncementRepository
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<IEnumerable<AnnouncementResponseDto>> GetAllAsync(string? category, string? subCategory, bool? status)
+    public async Task<IEnumerable<AnnouncementDataDto>> GetAllAsync(string? category, string? subCategory, bool? status)
     {
         using var db = _connectionFactory.CreateConnection();
 
-        return await db.QueryAsync<AnnouncementResponseDto>(
+        return await db.QueryAsync<AnnouncementDataDto>(
             "dbo.sp_GetAnnouncements",
             new { Category = category, SubCategory = subCategory, Status = status },
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<AnnouncementResponseDto?> GetByIdAsync(int id)
+    public async Task<AnnouncementDataDto?> GetByIdAsync(int id)
     {
         using var db = _connectionFactory.CreateConnection();
 
-        return await db.QuerySingleOrDefaultAsync<AnnouncementResponseDto>(
+        return await db.QuerySingleOrDefaultAsync<AnnouncementDataDto>(
             "dbo.sp_GetAnnouncementById",
             new { Id = id },
             commandType: CommandType.StoredProcedure);

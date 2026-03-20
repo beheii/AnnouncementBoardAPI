@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using NoticeBoard.Infrastructure.Data;
 using NoticeBoard.Models;
 
 namespace NoticeBoard.Repositories;

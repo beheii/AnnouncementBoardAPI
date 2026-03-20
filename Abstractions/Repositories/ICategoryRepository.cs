@@ -1,9 +1,8 @@
 using NoticeBoard.DTO;
 
-namespace NoticeBoard.Services;
+namespace NoticeBoard.Repositories;
 
-public interface ICategoryService
+public interface ICategoryRepository
 {
     Task<List<CategoryOptionDto>> GetCategoryOptionsAsync();
 }
-

@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace NoticeBoard.Repositories;
+namespace NoticeBoard.Infrastructure.Data;
 
 public interface IDbConnectionFactory
 {

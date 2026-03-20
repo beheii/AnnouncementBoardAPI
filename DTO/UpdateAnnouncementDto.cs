@@ -16,8 +16,8 @@ public class UpdateAnnouncementDto
 
     [Required]
     [StringLength(100)]
-    public string Category { get; set; } = string.Empty;
+    public string Category { get; set; } = string.Empty; // Stored procedure resolves this name to CategoryId.
 
     [StringLength(100)]
-    public string? SubCategory { get; set; }
+    public string? SubCategory { get; set; } // Optional name resolved to SubCategoryId.
 }
