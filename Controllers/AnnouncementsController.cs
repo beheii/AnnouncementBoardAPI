@@ -13,17 +13,17 @@ namespace NoticeBoard.Controllers;
 public class AnnouncementsController(IAnnouncementService service, IUserRepository userRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Announcement>>> GetAll(
+    public async Task<ActionResult<IEnumerable<AnnouncementResponseDto>>> GetAll(
         [FromQuery] string? category,
         [FromQuery] string? subCategory,
         [FromQuery] bool? status)
     {
         var items = await service.GetAllAsync(category, subCategory, status);
-        return Ok(items);
+        return Ok(items.Select(MapToResponseDto));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Announcement>> GetById(int id)
+    public async Task<ActionResult<AnnouncementResponseDto>> GetById(int id)
     {
         var item = await service.GetByIdAsync(id);
         if (item is null)
@@ -31,7 +31,7 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
             return NotFound();
         }
 
-        return Ok(item);
+        return Ok(MapToResponseDto(item));
     }
 
     [Authorize]
@@ -40,7 +40,7 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
     {
         var userId = await GetCurrentUserIdAsync();
         var created = await service.CreateAsync(dto, userId);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, MapToResponseDto(created));
     }
 
     [Authorize]
@@ -94,5 +94,21 @@ public class AnnouncementsController(IAnnouncementService service, IUserReposito
 
         var user = await userRepository.FindOrCreateAsync(sub, email, name);
         return user.Id;
+    }
+
+    private static AnnouncementResponseDto MapToResponseDto(Announcement announcement)
+    {
+        return new AnnouncementResponseDto
+        {
+            Id = announcement.Id,
+            UserId = announcement.UserId,
+            Title = announcement.Title,
+            Description = announcement.Description,
+            CreatedDate = announcement.CreatedDate,
+            UpdatedDate = announcement.UpdatedDate,
+            Status = announcement.Status,
+            Category = announcement.Category,
+            SubCategory = announcement.SubCategory
+        };
     }
 }

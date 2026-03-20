@@ -1,6 +1,6 @@
-namespace NoticeBoard.Models;
+namespace NoticeBoard.DTO;
 
-public class Announcement
+public class AnnouncementResponseDto
 {
     public int Id { get; set; }
     public int UserId { get; set; }
@@ -9,7 +9,6 @@ public class Announcement
     public DateTime CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }
     public bool Status { get; set; }
-    public int Category { get; set; } = string.Empty;
-    public int SubCategory { get; set; }
+    public string Category { get; set; } = string.Empty;
+    public string? SubCategory { get; set; }
 }
-
