@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using NoticeBoard.Infrastructure.Data;
-using NoticeBoard.Middleware;
 using NoticeBoard.Repositories;
+using NoticeBoard.Services;
 
 namespace NoticeBoard
 {
@@ -30,23 +29,12 @@ namespace NoticeBoard
                 });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("FrontendPolicy", policy =>
-                {
-                    var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-                    if (origins.Length > 0)
-                    {
-                        policy.WithOrigins(origins)
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    }
-                });
-            });
 
             builder.Services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
             builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+            builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();
@@ -56,8 +44,6 @@ namespace NoticeBoard
 
             app.UseHttpsRedirection();
 
-            app.UseCors("FrontendPolicy");
-            app.UseMiddleware<GlobalExceptionMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

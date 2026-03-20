@@ -16,8 +16,8 @@ public class CreateAnnouncementDto
 
     [Required]
     [StringLength(100)]
-    public string Category { get; set; } = string.Empty; // Stored procedure resolves this name to CategoryId.
+    public string Category { get; set; } = string.Empty;
 
     [StringLength(100)]
-    public string? SubCategory { get; set; } // Optional name resolved to SubCategoryId.
+    public string? SubCategory { get; set; }
 }

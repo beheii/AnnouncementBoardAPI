@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NoticeBoard.DTO;
 using NoticeBoard.Repositories;
 
 namespace NoticeBoard.Controllers;
@@ -22,11 +21,6 @@ public class UsersController(IUserRepository userRepository) : ControllerBase
             return BadRequest("Missing required claims.");
 
         var user = await userRepository.FindOrCreateAsync(sub, email, name);
-        return Ok(new CurrentUserDto
-        {
-            Id = user.Id,
-            Email = user.Email,
-            DisplayName = user.DisplayName
-        });
+        return Ok(user);
     }
 }
