@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using NoticeBoard.DTO;
-using NoticeBoard.Repositories;
+using NoticeBoard.Services;
 
 namespace NoticeBoard.Controllers;
 
 [ApiController]
 [Route("api/categories")]
-public class CategoriesController(ICategoryRepository repository) : ControllerBase
+public class CategoriesController(ICategoryService service) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<CategoryOptionDto>>> GetAll()
     {
-        var result = await repository.GetCategoryOptionsAsync();
+        var result = await service.GetCategoryOptionsAsync();
         return Ok(result);
     }
 }

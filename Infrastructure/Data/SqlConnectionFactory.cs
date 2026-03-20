@@ -1,7 +1,7 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace NoticeBoard.Infrastructure.Data;
+namespace NoticeBoard.Repositories;
 
 public class SqlConnectionFactory : IDbConnectionFactory
 {
