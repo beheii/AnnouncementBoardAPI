@@ -2,6 +2,10 @@
 
 An **ASP.NET Core API** application for the Announcement board project. It handles business logic, data processing, and communication with the database. The API provides endpoints for managing announcements and is consumed by a separate **[ASP.NET Core MVC frontend](https://announcement-board-frontend-gabvcrfhfbdjamh0.polandcentral-01.azurewebsites.net/)**
 
+The core functionality was implemented to support full CRUD operations, allowing users to create, view, update, and delete announcements. Each announcement includes a title, description, creation date, and status (active or inactive).
+
+The system was designed with support for categorization, including predefined categories and subcategories, enabling structured organization of announcements and efficient filtering.
+
 Beyond the requirements defined in the technical specification, several enhancements were implemented to improve the overall structure, performance, and maintainability of the application:
 
 ## Database Structure & Optimization
